@@ -97,45 +97,12 @@ function hasReqFields(req, res, next){
 }
 
 //PUT -Update an existing ORDER with the data in the request.
-function update(req, res) {
-    const order = res.locals.order;
-    const { data: { deliverTo, mobileNumber, dishes, quantity } = {} } = req.body;
-    order.deliverTo = deliverTo;
-    order.mobileNumber = mobileNumber;
-    order.dishes = dishes;
-    order.quantity = quantity;
 
-    res.json({data: order})
-}
 
 
 //The update validation must include all of the same validation as the POST /orders route, plus the following:
 
-function updateValidate(req, res, next) {
-    const { orderId } = req.params;
-    const order = res.locals.order
-    const { data: { id, status } = {} } = req.body;
 
-    if (id && id !== orderId) {
-        next({
-            status: 400,
-            message: `Order id does not match route id. Order: ${id}, Route: ${orderId}`,
-          });
-    }  
-      if(!status || !["pending", "preparing", "out-for-dellivery", "delivered"].includes(status)) {
-            next({
-                status: 400,
-                message: "Order must have a status of pending, preparing, out-for-delivery, delivered",
-        })
-    }
-      if(order.status === "delivered"){
-          next({
-              status: 400,
-              message: "A delivered order cannot be changed",
-          })
-      }
-      next()
-}
 
 //DELETE /orders/:orderId - This route will delete the order where id === :orderId, or return 404 if no matching order is found.
 
